@@ -1,0 +1,99 @@
+# Multilevel Inheritance in C++: Code Explanation
+This program demonstrates **multilevel inheritance** in C++. Three classes are chained together, where each class inherits from the one before it:
+
+Person  →  Student  →  EngineeringStudent
+(base)     (derived)    (further derived)
+
+An `EngineeringStudent` object therefore contains everything from `Student` and `Person` as well as its own members.
+
+## Header Files and Namespace
+#include <iostream>
+#include <string>
+using namespace std;
+- `<iostream>` provides `cout` and `endl` for console output.
+- `<string>` provides the `string` type.
+- `using namespace std;` lets you write `cout` instead of `std::cout`.
+
+#Class 1: `Person` (Base Class)
+class Person
+{
+public:
+    string name;
+    int age;
+
+    void displayPerson() { ... }
+};
+| Member            | Type     | Purpose                              |
+|-------------------|----------|--------------------------------------|
+| `name`            | `string` | Stores the person's name             |
+| `age`             | `int`    | Stores the person's age              |
+| `displayPerson()` | method   | Prints the name and age              |
+This is the top of the hierarchy and holds the data common to every person.
+
+## Class 2: `Student` (Derived Class)
+class Student : public Person
+{
+public:
+    int studentID;
+
+    void displayStudent() { ... }
+};
+- `: public Person` means `Student` **inherits** from `Person` using **public inheritance**.
+- Public inheritance keeps `Person`'s public members public inside `Student`.
+- `Student` adds its own member, `studentID`, and the method `displayStudent()`.
+- A `Student` therefore has: `name`, `age`, `studentID`, `displayPerson()`, `displayStudent()`.
+
+## Class 3: `EngineeringStudent` (Further Derived Class)
+class EngineeringStudent : public Student
+{
+public:
+    string course;
+
+    void displayEngineering() { ... }
+};
+- Inherits from `Student`, which already inherits from `Person`. This chain is what makes it *multilevel* inheritance.
+- Adds `course` and `displayEngineering()`.
+- An `EngineeringStudent` has access to **everything**:
+
+| Inherited from | Members available                     |
+|----------------|---------------------------------------|
+| `Person`       | `name`, `age`, `displayPerson()`      |
+| `Student`      | `studentID`, `displayStudent()`       |
+| Itself         | `course`, `displayEngineering()`      |
+
+# The `main()` Function
+
+ 1. Create an object
+EngineeringStudent s;
+Only the most-derived class needs to be instantiated. The object already contains the `Person` and `Student` parts.
+
+# 2. Assign values
+s.name = "Eng HAKIM";                                  // from Person
+s.age = 21;                                            // from Person
+s.studentID = 54564;                                   // from Student
+s.course = "COMPUTER & COMMUNICATIONS Engineering";    // own member
+Each comment in the code marks which class the member belongs to. All of them are accessed with the same dot operator on `s`.
+
+ 3. Display the data
+cout << "ENGINEERING STUDENT DETAILS" << endl;
+
+s.displayPerson();       // Person's method
+s.displayStudent();      // Student's method
+s.displayEngineering();  // EngineeringStudent's method
+Each call prints the part of the data its class is responsible for.
+
+# Expected Output
+ENGINEERING STUDENT DETAILS
+Name: Eng HAKIM
+Age: 21
+Student ID: 54564
+Course: COMPUTER & COMMUNICATIONS Engineering
+
+# Key Concepts i have learnt from this take home assignment 2
+
+1. **Inheritance**: derived classes reuse the members of their parent classes.
+2. **Multilevel inheritance**: a class derives from a class that itself derives from another (`Person → Student → EngineeringStudent`).
+3. **Code reuse**: `name` and `age` are written once in `Person` and reused by every class below it.
+4. **Public inheritance**: public members of the base class stay publicly accessible through derived objects.
+5. **Specialization**: each level adds only what is specific to it (ID for students, course for engineering students).
+

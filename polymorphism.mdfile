@@ -1,0 +1,44 @@
+# Polymorphism in C++: Payment Syste
+This program demonstrates **runtime polymorphism** using a `virtual` function. One function call behaves differently depending on the actual type of the object passed in.
+ Payment (base)
+CashPayment    MobileMoneyPayment
+
+# The Classes
+
+**`Payment` (base class)**
+- Holds `amount`, the payment value.
+- Declares `makePayment()` as `virtual`, which allows derived classes to replace its behavior.
+
+**`CashPayment` and `MobileMoneyPayment` (derived classes)**
+- Each inherits publicly from `Payment`.
+- Each **overrides** `makePayment()` with its own message.
+- The `override` keyword makes the compiler check that the function really overrides a virtual one, catching typos and signature mistakes.
+
+## The Key Function
+void processPayment(Payment& p)
+{
+    p.makePayment();
+}
+
+- It takes a **reference to the base class**, so it accepts any `Payment` or any class derived from it.
+- Because `makePayment()` is virtual, C++ decides **at runtime** which version to call, based on the real object, not the reference type.
+- Without `virtual`, it would always call `Payment::makePayment()` and print "Processing payment".
+
+## The main() Function
+1. Creates a `CashPayment` and a `MobileMoneyPayment` object.
+2. Sets their amounts to 50000 and 100000.
+3. Passes each one to `processPayment()`.
+
+#Output
+PAYMENT SYSTEM
+Cash payment made: UGX 50000
+Mobile money payment made: UGX 100000
+
+# Key Concepts i learnt with this:
+
+ Concept and Where it appears 
+ Inheritance - Both payment classes derive from `Payment` |
+ Virtual function -`virtual void makePayment()` |
+ Overriding - `makePayment() override` in each derived class |
+ Polymorphism -`processPayment(Payment& p)` works with any payment type |
+
